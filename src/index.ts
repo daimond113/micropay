@@ -4,6 +4,7 @@ import RateLimit, { RateLimitOptions } from '@fastify/rate-limit'
 import { dbClient } from './utils'
 import { Guild } from 'discord.js'
 import Cors from '@fastify/cors'
+import ms from 'ms'
 const fastify = Fastify({ logger: true })
 let invite: string
 
@@ -230,6 +231,10 @@ fastify.get('/invite', {
             permissions: 'ADMINISTRATOR'
         }), { shard: 0 }))
     }
+})
+
+fastify.get('/', async () => {
+    return `Up for ${ms(process.uptime() * 1000, { long: true })}`
 })
 
 fastify.listen(
