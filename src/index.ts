@@ -5,6 +5,7 @@ import { dbClient } from './utils'
 import { Guild } from 'discord.js'
 import Cors from '@fastify/cors'
 import ms from 'ms'
+import axios from 'axios'
 const fastify = Fastify({ logger: true })
 let invite: string
 
@@ -239,4 +240,8 @@ fastify.get('/', async () => {
 fastify.listen(
     parseInt(process.env.PORT ?? '3000'),
     process.env.SERVER_ADDRESS ?? '127.0.0.1'
-).then(console.log)
+).then((address) => {
+    setInterval(() => {
+        axios.get(address).then(() => console.log('Pinged'))
+    }, 300_000)
+})
