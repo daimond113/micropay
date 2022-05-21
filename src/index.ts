@@ -237,6 +237,8 @@ fastify.get('/', async () => {
     return `Up for ${ms(process.uptime() * 1000, { long: true })}`
 })
 
+fastify.head('/', async () => 'ok')
+
 fastify.listen(
     parseInt(process.env.PORT ?? '3000'),
     process.env.SERVER_ADDRESS ?? '127.0.0.1'
