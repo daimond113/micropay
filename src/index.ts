@@ -240,8 +240,4 @@ fastify.get('/', async () => {
 fastify.listen(
     parseInt(process.env.PORT ?? '3000'),
     process.env.SERVER_ADDRESS ?? '127.0.0.1'
-).then((address) => {
-    setInterval(() => {
-        axios.get(address).then(() => console.log('Pinged'))
-    }, 300_000)
-})
+)
