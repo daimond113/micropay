@@ -100,21 +100,3 @@ export async function formatCurrency(amount: number, config: GuildConfig | strin
     if (typeof config === 'string') config = await dbClient.getGuildConfig(config)
     return `${config.currencyBefore ? config.currency : ''}${amount}${config.currencyBefore ? '' : config.currency}`
 }
-
-export const enum Collections {
-    Guilds = 'guilds',
-    Users = 'users'
-}
-
-export class TimedMap<K, V> extends Map<K, V> {
-    private time: number
-    constructor(time: number) {
-        super()
-        this.time = time
-    }
-    public set(key: K, value: V): this {
-        setTimeout(() => this.delete(key), this.time)
-        super.set(key, value)
-        return this
-    }
-}

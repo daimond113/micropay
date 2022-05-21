@@ -228,7 +228,6 @@ fastify.get('/invite', {
     return {
         invite: (invite ??= await manager.broadcastEval((c) => c.generateInvite({
             scopes: ['bot', 'applications.commands'],
-            permissions: 'ADMINISTRATOR'
         }), { shard: 0 }))
     }
 })
