@@ -31,7 +31,7 @@ export class DBClient {
 
     public accountsCollection = this.db.then(db => db.collection<Account>('accounts'))
     public guildsCollection = this.db.then(db => db.collection<InternalGuildConfig>('guilds'))
-    public filterCurrency = (currency: string) => currency.length > 1 && currency.length < 4 && /(^[a-zA-Z0-9]+$)|([\$\xA2-\xA5\u058F\u060B\u07FE\u07FF\u09F2\u09F3\u09FB\u0AF1\u0BF9\u0E3F\u17DB\u20A0-\u20C0\uA838\uFDFC\uFE69\uFF04\uFFE0\uFFE1\uFFE5\uFFE6]|\uD807[\uDFDD-\uDFE0]|\uD838\uDEFF|\uD83B\uDCB0)/.test(currency)
+    public filterCurrency = (currency: string) => currency.length >= 1 && currency.length <= 3 && /(^[a-zA-Z0-9]+$)|([\$\xA2-\xA5\u058F\u060B\u07FE\u07FF\u09F2\u09F3\u09FB\u0AF1\u0BF9\u0E3F\u17DB\u20A0-\u20C0\uA838\uFDFC\uFE69\uFF04\uFFE0\uFFE1\uFFE5\uFFE6]|\uD807[\uDFDD-\uDFE0]|\uD838\uDEFF|\uD83B\uDCB0)/.test(currency)
     private _genAPIKey = () => nanoid(40)
 
     public async getAccount(ofId: string, guildId: string): Promise<Account> {
