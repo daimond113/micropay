@@ -12,10 +12,9 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@discordjs/builders": "^0.14.0-dev.1652573539-7ce641d",
+    "@discordjs/builders": "^0.14.0-dev.1653480270-68d5169",
     "@discordjs/rest": "^0.4.1",
     "@fastify/cors": "^7.0.0",
-    "@fastify/rate-limit": "^6.0.1",
     "axios": "^0.27.2",
     "canvas": "^2.9.1",
     "discord.js": "^13.7.0",
@@ -30,7 +29,7 @@
     "@types/node": "^17.0.35",
     "dotenv": "^16.0.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.6.4"
+    "typescript": "^4.7.2"
   },
   "scripts": {
     "build": "rimraf dist && tsc",

@@ -1,18 +1,11 @@
 import Fastify from 'fastify'
 import { manager } from './manager'
-import RateLimit, { RateLimitOptions } from '@fastify/rate-limit'
 import { dbClient } from './utils'
 import { Guild } from 'discord.js'
 import Cors from '@fastify/cors'
 import ms from 'ms'
-import axios from 'axios'
 const fastify = Fastify({ logger: true })
 let invite: string
-
-fastify.register(RateLimit, {
-    max: 50,
-    timeWindow: '1 minute'
-})
 
 fastify.register(Cors)
 
@@ -35,12 +28,6 @@ fastify.get<{ Params: { guildId: string }, Headers: { 'x-dapi-id': string, 'x-fr
             required: ['x-dapi-id', 'x-frontend-key']
         }
     },
-    config: {
-        rateLimit: {
-            max: 100,
-            timeWindow: '1 minute'
-        } as RateLimitOptions
-    }
 }, async (req, res) => {
     const guildId = req.params.guildId
     const tokenId = req.headers['x-dapi-id']
@@ -63,12 +50,6 @@ fastify.get<{ Headers: { 'x-api-token': string } }>('/config', {
             required: ['x-api-token']
         }
     },
-    config: {
-        rateLimit: {
-            max: 10,
-            timeWindow: '2 minute'
-        } as RateLimitOptions
-    }
 }, async (req, res) => {
     const token = req.headers['x-api-token']
     if (!token) return res.code(401).send('Invalid token')
@@ -95,12 +76,6 @@ fastify.post<{ Headers: { 'x-api-token': string }, Params: { guildId: string }, 
             required: ['x-api-token']
         },
     },
-    config: {
-        rateLimit: {
-            max: 5,
-            timeWindow: '1 minute'
-        } as RateLimitOptions
-    }
 },
     async (req, res) => {
         const token = req.headers['x-api-token']
@@ -136,12 +111,6 @@ fastify.post<{ Params: { guildId: string }, Headers: { 'x-dapi-id': string, 'x-f
             required: ['x-dapi-id', 'x-frontend-key']
         }
     },
-    config: {
-        rateLimit: {
-            max: 5,
-            timeWindow: '30 minutes'
-        } as RateLimitOptions
-    }
 }, async (req, res) => {
     const guildId = req.params.guildId
     const tokenId = req.headers['x-dapi-id']
@@ -165,12 +134,6 @@ fastify.get<{ Params: { id: string } }>('/is-in/:id', {
             required: ['id']
         }
     },
-    config: {
-        rateLimit: {
-            max: 150,
-            timeWindow: '1 minute'
-        } as RateLimitOptions
-    }
 }, async (req, res) => {
     const id = req.params.id
     const guild = await (await manager.broadcastEval((c, { id }) => c.guilds.cache.get(id), { context: { id } }) as (Guild | undefined)[]).find((v) => v !== undefined)
@@ -201,12 +164,6 @@ fastify.post<{ Params: { userId: string }, Body: { amount: number }, Headers: { 
             required: ['x-api-token']
         }
     },
-    config: {
-        rateLimit: {
-            max: 5,
-            timeWindow: '1 minute'
-        } as RateLimitOptions
-    }
 }, async (req, res) => {
     const { userId } = req.params
     const { amount } = req.body
@@ -218,14 +175,7 @@ fastify.post<{ Params: { userId: string }, Body: { amount: number }, Headers: { 
     return res.send({ success: true })
 })
 
-fastify.get('/invite', {
-    config: {
-        rateLimit: {
-            max: 500,
-            timeWindow: '1 minute'
-        } as RateLimitOptions
-    }
-}, async () => {
+fastify.get('/invite', async () => {
     return {
         invite: (invite ??= await manager.broadcastEval((c) => c.generateInvite({
             scopes: ['bot', 'applications.commands'],
